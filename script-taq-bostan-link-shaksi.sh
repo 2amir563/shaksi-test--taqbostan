@@ -74,7 +74,7 @@ execute_option() {
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
       # لینک جدید و ۱۰۰٪ تست شده شما
-      bash <(curl -Ls https://bayanbox.ir/download/997994556772489982/hysteria-balink-shaksi.sh)
+      bash <(curl -Ls https://bayanbox.ir/download/3195673794156229304/script-taq-bostan-link-shaksi.sh)
       ;;
     2)
       echo -e "${CYAN}Executing local IPv6 with Sit...${RESET}"
