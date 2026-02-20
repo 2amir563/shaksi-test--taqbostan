@@ -73,7 +73,7 @@ execute_option() {
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
       # لینک نهایی به اسکریپت اصلی در بیان
-      bash <(curl -Ls https://bayanbox.ir/download/6150559480873366137/hysteria.sh)
+      bash <(curl -Ls https://bayanbox.ir/download/4913337099629219066/hysteria.sh)
       ;;
     2)
       echo -e "${CYAN}Executing local IPv6 with Sit...${RESET}"
