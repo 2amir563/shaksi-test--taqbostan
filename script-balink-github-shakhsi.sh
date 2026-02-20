@@ -1,4 +1,12 @@
 #!/bin/bash
+if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
+    sudo cp "$0" /usr/local/bin/taq-bostan
+    sudo chmod +x /usr/local/bin/taq-bostan
+    if ! grep -q "alias taq-bostan=" ~/.bashrc; then
+        echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
+        export PATH="$PATH:/usr/local/bin"
+    fi
+fi
 
 # تعریف رنگ‌ها
 GREEN="\e[32m"
