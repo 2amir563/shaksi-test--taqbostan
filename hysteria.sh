@@ -1,4 +1,5 @@
 #!/bin/bash
+# Optimized for installation using Personal GitHub Links
 set -Eeuo pipefail
 trap 'colorEcho "Script terminated prematurely." red' ERR SIGINT SIGTERM
 
@@ -16,6 +17,34 @@ colorEcho() {
     *)       echo "$text" ;;
   esac
 }
+
+# ------------------ بخش لینک‌های اختصاصی گیت‌هاب شما ------------------
+# لینک‌های مستقیم از مخزن گیت‌هاب شما
+HYSTERIA_VERSION_AMD64="https://github.com/2amir563/shaksi-test--taqbostan/raw/main/hysteria-linux-amd64"
+MONITOR_PY_URL="https://github.com/2amir563/shaksi-test--taqbostan/raw/main/hysteria-monitor.py"
+
+# ------------------ Initialization & Core Download ------------------
+ARCH=$(uname -m)
+case "$ARCH" in
+  x86_64)   DOWNLOAD_URL="$HYSTERIA_VERSION_AMD64" ;;
+  *) colorEcho "Architecture $ARCH not supported." red; exit 1 ;;
+esac
+
+if [ ! -f "/usr/local/bin/hysteria" ]; then
+  colorEcho "Downloading Hysteria binary from GitHub..." cyan
+  curl -fsSL "$DOWNLOAD_URL" -o hysteria
+  chmod +x hysteria
+  sudo mv hysteria /usr/local/bin/
+fi
+
+sudo mkdir -p /etc/hysteria/ /var/log/hysteria/
+if [ ! -f /etc/hysteria/hysteria-monitor.py ]; then
+  colorEcho "Downloading Monitoring script from GitHub..." cyan
+  sudo curl -fsSL "$MONITOR_PY_URL" -o /etc/hysteria/hysteria-monitor.py
+  sudo chmod +x /etc/hysteria/hysteria-monitor.py
+fi
+
+# ------------------ از اینجا به بعد کدهای اصلی خود hysteria.sh را کپی کن ------------------
 # ------------------ draw_menu ------------------
 draw_menu() {
   local title="$1"
@@ -59,9 +88,9 @@ draw_menu() {
 
 # ------------------ Initialization ------------------
 ARCH=$(uname -m)
-HYSTERIA_VERSION_AMD64="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria-linux-amd64"
+HYSTERIA_VERSION_AMD64="https://github.com/apernet/hysteria/releases/download/app%2Fv2.6.1/hysteria-linux-amd64"
 HYSTERIA_VERSION_ARM="https://github.com/apernet/hysteria/releases/download/app%2Fv2.6.1/hysteria-linux-arm"
-HYSTERIA_VERSION_ARM64="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria-linux-arm64"
+HYSTERIA_VERSION_ARM64="https://github.com/apernet/hysteria/releases/download/app%2Fv2.6.1/hysteria-linux-arm64"
 
 case "$ARCH" in
   x86_64)   DOWNLOAD_URL="$HYSTERIA_VERSION_AMD64" ;;
@@ -92,7 +121,7 @@ fi
 sudo mkdir -p /var/log/hysteria/
 
 if [ ! -f /etc/hysteria/hysteria-monitor.py ]; then
-  sudo curl -fsSL https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria-monitor.py \
+  sudo curl -fsSL https://raw.githubusercontent.com/ParsaKSH/TAQ-BOSTAN/main/hysteria-monitor.py \
     -o /etc/hysteria/hysteria-monitor.py
   sudo chmod +x /etc/hysteria/hysteria-monitor.py
 fi
