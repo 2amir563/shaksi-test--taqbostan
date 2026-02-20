@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# --- بخش هوشمند برای اجرای سریع (بدون نیاز به دانلود مجدد) ---
-# این بخش اسکریپت را در سیستم ذخیره می‌کند تا با تایپ taq-bostan اجرا شود
+# --- بخش اصلاح شده برای رفع ارور cp و ایجاد میانبر (فقط این بخش تغییر کرد) ---
 if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
-    # به جای کپی کردن فایل موقت، فایل را مستقیماً دانلود و ذخیره می‌کنیم
+    # دانلود مستقیم نسخه اصلی به جای کپی از فایل موقت برای جلوگیری از ارور /dev/fd
     sudo curl -Ls "https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/script-balink-github-shakhsi.sh" -o /usr/local/bin/taq-bostan
     sudo chmod +x /usr/local/bin/taq-bostan
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
         echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
-        source ~/.bashrc 2>/dev/null || true
+        # اعمال تغییرات در محیط فعلی
+        export PATH="$PATH:/usr/local/bin"
     fi
 fi
 
