@@ -139,7 +139,7 @@ execute_option() {
   esac
 }
 
-# اجرای برنامه
+# اجرای برنامه با حفظ ساختار اصلی
 print_art
 print_menu
 read -p "Please select an option: " user_choice
