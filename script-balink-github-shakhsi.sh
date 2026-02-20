@@ -82,7 +82,7 @@ execute_option() {
   case "$choice" in
     1)
       echo -e "${CYAN}Executing Hysteria2 Setup from your GitHub Repo...${RESET}"
-      bash <(curl -Ls ${base_url}/hysteria-balink-github-shakhsi.sh)
+      bash <(curl -Ls ${base_url}/hysteria.sh)
       ;;
     2)
       echo -e "${CYAN}Executing SIT Tunnel Setup from your GitHub Repo...${RESET}"
