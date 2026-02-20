@@ -7,12 +7,11 @@ if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
     sudo chmod +x /usr/local/bin/taq-bostan
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
         echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
-        # تلاش برای اعمال تغییرات در جلسه فعلی
         export PATH="$PATH:/usr/local/bin"
     fi
 fi
 
-# تعریف رنگ‌ها (دقیقا مطابق فایل شما)
+# تعریف رنگ‌ها
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -73,8 +72,8 @@ execute_option() {
   case "$choice" in
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
-      # لینک جدید و ۱۰۰٪ تست شده شما
-      bash <(curl -Ls https://bayanbox.ir/download/3195673794156229304/script-taq-bostan-link-shaksi.sh)
+      # این لینک به آدرس جدید hysteria.sh شما تغییر یافت
+      bash <(curl -Ls https://bayanbox.ir/download/6150559480873366137/hysteria.sh)
       ;;
     2)
       echo -e "${CYAN}Executing local IPv6 with Sit...${RESET}"
