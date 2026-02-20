@@ -77,7 +77,7 @@ print_menu() {
 # اجرای دستورات بر اساس مخزن شخصی شما
 execute_option() {
   local choice="$1"
-  local base_url="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main"
+  local base_url="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria.sh"
   
   case "$choice" in
     1)
