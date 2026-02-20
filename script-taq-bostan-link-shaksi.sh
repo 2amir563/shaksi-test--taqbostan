@@ -72,7 +72,7 @@ execute_option() {
   case "$choice" in
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
-      # این لینک به آدرس جدید hysteria.sh شما تغییر یافت
+      # لینک نهایی و جدید هیستریا در سایت بیان شما
       bash <(curl -Ls https://bayanbox.ir/download/6150559480873366137/hysteria.sh)
       ;;
     2)
