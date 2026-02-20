@@ -1,18 +1,21 @@
 #!/bin/bash
 
-# --- بخش اصلاح شده برای رفع ارور cp و ایجاد میانبر (فقط این بخش تغییر کرد) ---
+# --- بخش هوشمند برای اجرای سریع (بدون نیاز به دانلود مجدد) ---
+# اگر اسکریپت از طریق curl اجرا شده باشد، محتوای در حال اجرا را در فایل مقصد ذخیره می‌کند
 if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
-    # دانلود مستقیم نسخه اصلی به جای کپی از فایل موقت برای جلوگیری از ارور /dev/fd
-    sudo curl -Ls "https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/script-taq-bostan-link-shaksi.sh" -o /usr/local/bin/taq-bostan
+    if [[ -f "$0" ]]; then
+        sudo cp "$0" /usr/local/bin/taq-bostan
+    else
+        cat "$0" | sudo tee /usr/local/bin/taq-bostan > /dev/null
+    fi
     sudo chmod +x /usr/local/bin/taq-bostan
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
         echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
-        # اعمال تغییرات در محیط فعلی
         export PATH="$PATH:/usr/local/bin"
     fi
 fi
 
-# تعریف رنگ‌ها (دقیقا مطابق فایل شما)
+# تعریف رنگ‌ها
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -23,10 +26,17 @@ WHITE="\e[37m"
 RED="\e[31m"
 RESET="\e[0m"
 
+# --- لینک‌های استخراج شده از کد شما (مخصوص بیان) ---
+LINK_HYSTERIA="https://bayanbox.ir/download/8975390779774351326/hysteria.sh"
+LINK_SIT="https://bayanbox.ir/download/123069150025178696/sit.sh"
+LINK_WG="https://bayanbox.ir/download/587979313587847990/wireguard.sh"
+
+# تابع کشیدن خط جداکننده
 draw_green_line() {
   echo -e "${GREEN}+--------------------------------------------------------+${RESET}"
 }
 
+# نمایش لوگو و اطلاعات شخصی‌سازی شده
 print_art() {
   echo -e "\033[1;32m"
   echo -e "@@@@@@@   @@@@@@    @@@@@@                                 "
@@ -73,16 +83,15 @@ execute_option() {
   case "$choice" in
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
-      # لینک نهایی به اسکریپت اصلی در بیان
-      bash <(curl -Ls https://bayanbox.ir/download/4913337099629219066/hysteria.sh)
+      bash <(curl -Ls "$LINK_HYSTERIA")
       ;;
     2)
       echo -e "${CYAN}Executing local IPv6 with Sit...${RESET}"
-      bash <(curl -Ls https://bayanbox.ir/download/99094217194741185/sit.sh)
+      bash <(curl -Ls "$LINK_SIT")
       ;;
     3)
       echo -e "${CYAN}Executing local IPv6 with Wireguard...${RESET}"
-      bash <(curl -Ls https://bayanbox.ir/download/7225823580627238025/wireguard.sh)
+      bash <(curl -Ls "$LINK_WG")
       ;;
     4)
        echo -e "${CYAN}Deleting Hysteria tunnel...${RESET}"
