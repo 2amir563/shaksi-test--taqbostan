@@ -19,9 +19,9 @@ colorEcho() {
 }
 
 # ------------------ بخش لینک‌های اختصاصی گیت‌هاب شما ------------------
-# لینک‌های مستقیم از مخزن گیت‌هاب شما
-HYSTERIA_VERSION_AMD64="https://github.com/2amir563/shaksi-test--taqbostan/raw/main/hysteria-linux-amd64"
-MONITOR_PY_URL="https://github.com/2amir563/shaksi-test--taqbostan/raw/main/hysteria-monitor.py"
+# لینک‌های مستقیم و صحیح از مخزن گیت‌هاب شما
+HYSTERIA_VERSION_AMD64="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria-linux-amd64"
+MONITOR_PY_URL="https://raw.githubusercontent.com/2amir563/shaksi-test--taqbostan/main/hysteria-monitor.py"
 
 # ------------------ Initialization & Core Download ------------------
 ARCH=$(uname -m)
@@ -44,7 +44,7 @@ if [ ! -f /etc/hysteria/hysteria-monitor.py ]; then
   sudo chmod +x /etc/hysteria/hysteria-monitor.py
 fi
 
-# ------------------ از اینجا به بعد کدهای اصلی خود hysteria.sh را کپی کن ------------------
+# ------------------ ادامه کدهای اصلی hysteria.sh ------------------
 # ------------------ draw_menu ------------------
 draw_menu() {
   local title="$1"
