@@ -1,31 +1,28 @@
 #!/bin/bash
 
-# ۱. لینک‌های بیان
+# ۱. تعریف لینک‌ها در بالاترین سطح (برای دسترسی عمومی در کل اسکریپت)
 LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. مدیریت نصب و Alias (نسخه فوق‌سریع و بدون توقف)
+# ۲. مدیریت نصب و Alias (اصلاح شده برای عدم تداخل با متغیرها)
 TARGET="/usr/local/bin/taq-bostan"
-
 if [[ "$0" != "$TARGET" ]]; then
-    # تلاش برای ذخیره فایل بدون ایجاد وقفه (اجرا در پس‌زمینه)
-    (
-        if [[ -f "$0" ]]; then
-            sudo cp "$0" "$TARGET" 2>/dev/null
-        else
-            # استفاده از یک روش جایگزین که باعث هنگ کردن نشه
-            timeout 1s cat /proc/self/fd/0 > /tmp/taq_temp 2>/dev/null
-            [[ -s /tmp/taq_temp ]] && sudo mv /tmp/taq_temp "$TARGET" 2>/dev/null
-        fi
-        sudo chmod +x "$TARGET" 2>/dev/null
-        if ! grep -q "alias taq-bostan=" ~/.bashrc 2>/dev/null; then
-            echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc 2>/dev/null
-        fi
-    ) & # اجرا در پس‌زمینه که جلوی منو رو نگیره
+    if [[ -f "$0" ]]; then
+        sudo cp "$0" "$TARGET" 2>/dev/null
+    else
+        # کپی امن محتوا بدون ایجاد وقفه در اجرای منو
+        cat /proc/self/fd/0 > /tmp/taq_temp 2>/dev/null &
+        sleep 0.2
+        [[ -s /tmp/taq_temp ]] && sudo mv /tmp/taq_temp "$TARGET" 2>/dev/null
+    fi
+    sudo chmod +x "$TARGET" 2>/dev/null
+    if ! grep -q "alias taq-bostan=" ~/.bashrc 2>/dev/null; then
+        echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc 2>/dev/null
+    fi
 fi
 
-# ۳. تعریف رنگ‌ها و توابع (بدون تغییر)
+# ۳. تعریف رنگ‌ها
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -86,15 +83,15 @@ execute_option() {
   case "$choice" in
     1)
       echo -e "${CYAN}Executing Hysteria Setup...${RESET}"
-      bash <(curl -Ls ${LINK_HYSTERIA})
+      bash <(curl -Ls "${LINK_HYSTERIA}")
       ;;
     2)
       echo -e "${CYAN}Executing local IPv6 with Sit...${RESET}"
-      bash <(curl -Ls ${LINK_SIT})
+      bash <(curl -Ls "${LINK_SIT}")
       ;;
     3)
       echo -e "${CYAN}Executing local IPv6 with Wireguard...${RESET}"
-      bash <(curl -Ls ${LINK_WG})
+      bash <(curl -Ls "${LINK_WG}")
       ;;
     4)
        echo -e "${CYAN}Deleting Hysteria tunnel...${RESET}"
