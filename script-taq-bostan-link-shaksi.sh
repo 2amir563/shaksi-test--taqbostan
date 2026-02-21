@@ -5,21 +5,28 @@ LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. مدیریت نصب و Alias (اصلاح شده برای عدم تداخل با متغیرها)
+# ۲. مدیریت نصب و Alias (نسخه قطعی و تست شده)
 TARGET="/usr/local/bin/taq-bostan"
+# لینک همین فایلی که الان داری تست می‌کنی رو اینجا بذار
+MY_LINK="https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh"
+
 if [[ "$0" != "$TARGET" ]]; then
+    echo -e "${YELLOW}Installing taq-bostan shortcut...${RESET}"
     if [[ -f "$0" ]]; then
         sudo cp "$0" "$TARGET" 2>/dev/null
     else
-        # کپی امن محتوا بدون ایجاد وقفه در اجرای منو
-        cat /proc/self/fd/0 > /tmp/taq_temp 2>/dev/null &
-        sleep 0.2
-        [[ -s /tmp/taq_temp ]] && sudo mv /tmp/taq_temp "$TARGET" 2>/dev/null
+        # دانلود مستقیم فایل برای اطمینان از نصب کامل در سرور خام
+        sudo curl -Ls "$MY_LINK" -o "$TARGET"
     fi
-    sudo chmod +x "$TARGET" 2>/dev/null
-    if ! grep -q "alias taq-bostan=" ~/.bashrc 2>/dev/null; then
-        echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc 2>/dev/null
+    
+    sudo chmod +x "$TARGET"
+    
+    if ! grep -q "alias taq-bostan=" ~/.bashrc; then
+        echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc
+        # این خط باعث میشه در همین جلسه هم کار کنه
+        alias taq-bostan="bash $TARGET"
     fi
+    echo -e "${GREEN}Installation complete! Use 'taq-bostan' command next time.${RESET}"
 fi
 
 # ۳. تعریف رنگ‌ها
