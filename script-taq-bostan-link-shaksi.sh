@@ -5,13 +5,14 @@ LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. بخش مدیریت نصب و Alias (حل مشکل ارور cp در سرور خام)
-if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
-    if [[ -f "$0" ]]; then
-        sudo cp "$0" /usr/local/bin/taq-bostan
+# ۲. بخش مدیریت نصب و Alias (اصلاح شده برای اجرای از طریق curl)
+if [[ "$0" != "/usr/local/bin/taq-bostan" ]] && [[ "$0" != "bash" ]]; then
+    # اگر اسکریپت از طریق curl اجرا شده باشد
+    if [[ "$0" == "/dev/fd/"* ]] || [[ ! -f "$0" ]]; then
+        # دانلود و ذخیره اسکریپت
+        sudo curl -Ls "https://bayanbox.ir/download/4913337099629219066/hysteria.sh" -o /usr/local/bin/taq-bostan
     else
-        # اگر از طریق curl اجرا شود، این دستور محتوا را در سرور ذخیره می‌کند
-        cat "$0" | sudo tee /usr/local/bin/taq-bostan > /dev/null
+        sudo cp "$0" /usr/local/bin/taq-bostan
     fi
     sudo chmod +x /usr/local/bin/taq-bostan
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
@@ -138,27 +139,9 @@ execute_option() {
   esac
 }
 
-# تابع اصلی منو (به درستی بسته شده)
-run_main_menu() {
-    clear
-    print_art
-    draw_green_line
-    echo -e "${GREEN}|${RESET}            ${BOLD_GREEN}TAQ-BOSTAN Main Menu (Bayan)${RESET}              ${GREEN}|${RESET}"
-    draw_green_line
-    echo -e "${GREEN}|${RESET} ${BLUE}1)${RESET} Create Hysteria2 Tunnel                         ${GREEN}|${RESET}"
-    echo -e "${GREEN}|${RESET} ${YELLOW}2)${RESET} Create local IPv6 with Sit                      ${GREEN}|${RESET}"
-    echo -e "${GREEN}|${RESET} ${MAGENTA}3)${RESET} Create local IPv6 with Wireguard                ${GREEN}|${RESET}"
-    draw_green_line
-    echo -e "${GREEN}|${RESET} ${BLUE}4)${RESET} Delete Hysteria tunnel                          ${GREEN}|${RESET}"
-    echo -e "${GREEN}|${RESET} ${YELLOW}5)${RESET} Delete local IPv6 with Sit                      ${GREEN}|${RESET}"
-    echo -e "${GREEN}|${RESET} ${MAGENTA}6)${RESET} Delete local IPv6 with Wireguard                ${GREEN}|${RESET}"
-    draw_green_line
-    echo -e "${GREEN}|${RESET} ${RED}7)${RESET} Hysteria Tunnel Speedtest                       ${GREEN}|${RESET}"
-    draw_green_line
-    
-    read -p "Please select an option: " user_choice
-    execute_option "$user_choice"
-} # <--- اینجا تابع به درستی بسته می‌شود
-
-# ۴. فراخوانی تابع اصلی (این خط بیرون از تابع و کاملاً به سمت چپ چسبیده است)
-run_main_menu
+# اجرای مستقیم منو (بدون تابع اضافی)
+clear
+print_art
+print_menu
+read -p "Please select an option: " user_choice
+execute_option "$user_choice"
