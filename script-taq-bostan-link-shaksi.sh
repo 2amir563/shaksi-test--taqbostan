@@ -5,31 +5,24 @@ LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. مدیریت نصب (بدون توقف و بدون نیاز به لینک ثابت)
+# ۲. مدیریت نصب و Alias (روش استاندارد لینوکس)
 TARGET="/usr/local/bin/taq-bostan"
+# لینک ثابت خودت رو اینجا بذار (هر لینکی که همین الان داری باهاش curl می‌زنی)
+MY_LINK="https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh"
 
 if [[ "$0" != "$TARGET" ]]; then
-    # اگر فایل فیزیکی وجود دارد (اجرای محلی)
-    if [[ -f "$0" ]]; then
-        sudo cp "$0" "$TARGET"
-    else
-        # اگر از curl اجرا شده، محتوای در حال اجرا را از فایل موقت لینوکس بردار
-        # این روش در سرور خام سریع‌ترین و مطمئن‌ترین است
-        cat /proc/$$/fd/255 > /tmp/taq_temp 2>/dev/null || cat "$0" > /tmp/taq_temp 2>/dev/null
-        
-        if [[ -s /tmp/taq_temp ]]; then
-            sudo mv /tmp/taq_temp "$TARGET"
-        fi
-    fi
-    
+    # دانلود مستقیم و ذخیره در فایل مقصد
+    sudo curl -Ls "$MY_LINK" -o "$TARGET"
     sudo chmod +x "$TARGET"
     
+    # ساخت Alias برای دفعات بعدی
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
         echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc
+        alias taq-bostan="bash $TARGET"
     fi
 fi
 
-# ۳. تعریف رنگ‌ها و توابع (بدون تغییر)
+# تعریف رنگ‌ها (دقیقا مطابق فایل شما)
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -147,7 +140,7 @@ execute_option() {
   esac
 }
 
-# ۴. اجرای مستقیم منو
+# اجرای مستقیم منو
 clear
 print_art
 print_menu
