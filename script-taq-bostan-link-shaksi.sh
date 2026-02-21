@@ -1,22 +1,29 @@
 #!/bin/bash
 
-# ۱. لینک‌های بیان
-LINK_MAIN="https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh"
+# ۱. لینک‌های بیان - در بالاترین بخش برای دسترسی آسان
 LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. بخش مدیریت نصب و Alias (رفع مشکل /dev/fd)
-if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
-    if [[ "$0" == "/dev/fd/"* ]] || [[ ! -f "$0" ]]; then
-        # اگر از curl اجرا شد، خودش را از لینک اصلی دانلود و ذخیره می‌کند
-        sudo curl -Ls "$LINK_MAIN" -o /usr/local/bin/taq-bostan
+# ۲. بخش مدیریت نصب و Alias (بدون نیاز به لینک دانلود)
+TARGET_PATH="/usr/local/bin/taq-bostan"
+
+if [[ "$0" != "$TARGET_PATH" ]]; then
+    # این دستور محتوای اسکریپتی که همین الان در حال اجراست (حتی از طریق curl)
+    # را برمی‌دارد و در فایل مقصد ذخیره می‌کند
+    cat <&0 > /tmp/taq_temp 2>/dev/null || cat "$0" > /tmp/taq_temp 2>/dev/null
+    
+    if [[ -s /tmp/taq_temp ]]; then
+        sudo mv /tmp/taq_temp "$TARGET_PATH"
     else
-        sudo cp "$0" /usr/local/bin/taq-bostan
+        # اگر روش بالا در برخی سیستم‌ها جواب نداد، از روش pipe مستقیم استفاده کن
+        curl -Ls "https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh" -o "$TARGET_PATH" 2>/dev/null
     fi
-    sudo chmod +x /usr/local/bin/taq-bostan
+
+    sudo chmod +x "$TARGET_PATH"
+    
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
-        echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
+        echo "alias taq-bostan='bash $TARGET_PATH'" >> ~/.bashrc
         source ~/.bashrc 2>/dev/null
     fi
 fi
