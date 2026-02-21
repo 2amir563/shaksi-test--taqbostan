@@ -5,24 +5,27 @@ LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. مدیریت نصب و Alias (روش استاندارد لینوکس)
+# ۲. مدیریت نصب و Alias (نسخه فوق‌سریع و بدون توقف)
 TARGET="/usr/local/bin/taq-bostan"
-# لینک ثابت خودت رو اینجا بذار (هر لینکی که همین الان داری باهاش curl می‌زنی)
-MY_LINK="https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh"
 
 if [[ "$0" != "$TARGET" ]]; then
-    # دانلود مستقیم و ذخیره در فایل مقصد
-    sudo curl -Ls "$MY_LINK" -o "$TARGET"
-    sudo chmod +x "$TARGET"
-    
-    # ساخت Alias برای دفعات بعدی
-    if ! grep -q "alias taq-bostan=" ~/.bashrc; then
-        echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc
-        alias taq-bostan="bash $TARGET"
-    fi
+    # تلاش برای ذخیره فایل بدون ایجاد وقفه (اجرا در پس‌زمینه)
+    (
+        if [[ -f "$0" ]]; then
+            sudo cp "$0" "$TARGET" 2>/dev/null
+        else
+            # استفاده از یک روش جایگزین که باعث هنگ کردن نشه
+            timeout 1s cat /proc/self/fd/0 > /tmp/taq_temp 2>/dev/null
+            [[ -s /tmp/taq_temp ]] && sudo mv /tmp/taq_temp "$TARGET" 2>/dev/null
+        fi
+        sudo chmod +x "$TARGET" 2>/dev/null
+        if ! grep -q "alias taq-bostan=" ~/.bashrc 2>/dev/null; then
+            echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc 2>/dev/null
+        fi
+    ) & # اجرا در پس‌زمینه که جلوی منو رو نگیره
 fi
 
-# تعریف رنگ‌ها (دقیقا مطابق فایل شما)
+# ۳. تعریف رنگ‌ها و توابع (بدون تغییر)
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -140,7 +143,7 @@ execute_option() {
   esac
 }
 
-# اجرای مستقیم منو
+# ۴. اجرای مستقیم منو (بدون هیچ توقفی)
 clear
 print_art
 print_menu
