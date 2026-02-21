@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# ۱. لینک‌های بیان - در بالاترین بخش برای دسترسی آسان
+# ۱. لینک‌های بیان
+LINK_MAIN="https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh"
 LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. بخش مدیریت نصب و Alias (اصلاح شده برای اجرای از طریق curl)
-if [[ "$0" != "/usr/local/bin/taq-bostan" ]] && [[ "$0" != "bash" ]]; then
-    # اگر اسکریپت از طریق curl اجرا شده باشد
+# ۲. بخش مدیریت نصب و Alias (رفع مشکل /dev/fd)
+if [[ "$0" != "/usr/local/bin/taq-bostan" ]]; then
     if [[ "$0" == "/dev/fd/"* ]] || [[ ! -f "$0" ]]; then
-        # دانلود و ذخیره اسکریپت
-        sudo curl -Ls "https://bayanbox.ir/download/4913337099629219066/hysteria.sh" -o /usr/local/bin/taq-bostan
+        # اگر از curl اجرا شد، خودش را از لینک اصلی دانلود و ذخیره می‌کند
+        sudo curl -Ls "$LINK_MAIN" -o /usr/local/bin/taq-bostan
     else
         sudo cp "$0" /usr/local/bin/taq-bostan
     fi
     sudo chmod +x /usr/local/bin/taq-bostan
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
         echo "alias taq-bostan='bash /usr/local/bin/taq-bostan'" >> ~/.bashrc
-        export PATH="$PATH:/usr/local/bin"
+        source ~/.bashrc 2>/dev/null
     fi
 fi
 
@@ -139,7 +139,7 @@ execute_option() {
   esac
 }
 
-# اجرای مستقیم منو (بدون تابع اضافی)
+# اجرای مستقیم منو
 clear
 print_art
 print_menu
