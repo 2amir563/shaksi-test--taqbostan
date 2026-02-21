@@ -1,34 +1,35 @@
 #!/bin/bash
 
-# ۱. لینک‌های بیان - در بالاترین بخش برای دسترسی آسان
+# ۱. لینک‌های بیان
 LINK_HYSTERIA="https://bayanbox.ir/download/4913337099629219066/hysteria.sh"
 LINK_SIT="https://bayanbox.ir/download/99094217194741185/sit.sh"
 LINK_WG="https://bayanbox.ir/download/7225823580627238025/wireguard.sh"
 
-# ۲. بخش مدیریت نصب و Alias (بدون نیاز به لینک دانلود)
-TARGET_PATH="/usr/local/bin/taq-bostan"
+# ۲. مدیریت نصب (بدون توقف و بدون نیاز به لینک ثابت)
+TARGET="/usr/local/bin/taq-bostan"
 
-if [[ "$0" != "$TARGET_PATH" ]]; then
-    # این دستور محتوای اسکریپتی که همین الان در حال اجراست (حتی از طریق curl)
-    # را برمی‌دارد و در فایل مقصد ذخیره می‌کند
-    cat <&0 > /tmp/taq_temp 2>/dev/null || cat "$0" > /tmp/taq_temp 2>/dev/null
-    
-    if [[ -s /tmp/taq_temp ]]; then
-        sudo mv /tmp/taq_temp "$TARGET_PATH"
+if [[ "$0" != "$TARGET" ]]; then
+    # اگر فایل فیزیکی وجود دارد (اجرای محلی)
+    if [[ -f "$0" ]]; then
+        sudo cp "$0" "$TARGET"
     else
-        # اگر روش بالا در برخی سیستم‌ها جواب نداد، از روش pipe مستقیم استفاده کن
-        curl -Ls "https://bayanbox.ir/download/4825123594932155662/script-taq-bostan-link-shaksi.sh" -o "$TARGET_PATH" 2>/dev/null
+        # اگر از curl اجرا شده، محتوای در حال اجرا را از فایل موقت لینوکس بردار
+        # این روش در سرور خام سریع‌ترین و مطمئن‌ترین است
+        cat /proc/$$/fd/255 > /tmp/taq_temp 2>/dev/null || cat "$0" > /tmp/taq_temp 2>/dev/null
+        
+        if [[ -s /tmp/taq_temp ]]; then
+            sudo mv /tmp/taq_temp "$TARGET"
+        fi
     fi
-
-    sudo chmod +x "$TARGET_PATH"
+    
+    sudo chmod +x "$TARGET"
     
     if ! grep -q "alias taq-bostan=" ~/.bashrc; then
-        echo "alias taq-bostan='bash $TARGET_PATH'" >> ~/.bashrc
-        source ~/.bashrc 2>/dev/null
+        echo "alias taq-bostan='bash $TARGET'" >> ~/.bashrc
     fi
 fi
 
-# تعریف رنگ‌ها (دقیقا مطابق فایل شما)
+# ۳. تعریف رنگ‌ها و توابع (بدون تغییر)
 GREEN="\e[32m"
 BOLD_GREEN="\e[1;32m"
 YELLOW="\e[33m"
@@ -146,7 +147,7 @@ execute_option() {
   esac
 }
 
-# اجرای مستقیم منو
+# ۴. اجرای مستقیم منو
 clear
 print_art
 print_menu
